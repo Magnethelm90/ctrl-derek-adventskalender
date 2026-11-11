@@ -1,0 +1,3 @@
+# Die versteckte Datei liegt im selben Ordner wie diese robots.txt
+User-agent: *
+Disallow: geheim-tuer5.html

@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta name="theme-color" content="#070b10">
+  <meta name="description" content="24 Türchen, 24 Hacking-Rätsel. Knack jeden Tag ein Türchen und rette Weihnachten vor Grinch.exe. Legal, kostenlos, ab 11.">
+  <meta property="og:title" content="ctrl+Derek Hacking-Adventskalender">
+  <meta property="og:description" content="24 Türchen, 24 Hacking-Rätsel. Rette Weihnachten vor Grinch.exe!">
+  <meta property="og:type" content="website">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070b10'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' font-family='monospace' font-weight='700' fill='%2300ff9c'%3E%3E_%3C/text%3E%3C/svg%3E">
+  <title>ctrl+Derek Adventskalender</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <canvas id="snow" aria-hidden="true"></canvas>
+  <canvas id="confetti" aria-hidden="true"></canvas>
+
+  <div class="wrap">
+    <nav class="themes modes" aria-label="Modus wählen">
+      <button type="button" data-mode="mobile">📱 Handy-Modus</button>
+      <button type="button" data-mode="pc">💻 PC-Modus</button>
+    </nav>
+    <nav class="themes" aria-label="Design wählen">
+      <button type="button" data-theme="terminal">💚 Terminal</button>
+      <button type="button" data-theme="winter">❄️ Winter</button>
+      <button type="button" data-theme="arcade">🕹️ Arcade</button>
+    </nav>
+    <header class="hero">
+      <div class="hero-main">
+        <p class="badge">🎄 Hacking-Adventskalender</p>
+        <h1 class="glitch" data-text="ctrl+Derek">ctrl<span>+</span>Derek</h1>
+        <p id="intro" class="terminal" aria-live="polite"></p>
+      </div>
+
+      <aside class="stats" aria-label="Dein Fortschritt">
+        <div class="rank-row">
+          <div>
+            <small>DEIN RANG</small>
+            <strong id="rank">Noob</strong>
+          </div>
+          <div class="xp"><small>PUNKTE</small><strong id="xp-text">0 XP</strong></div>
+        </div>
+        <div class="bar" role="progressbar" aria-label="Fortschritt" aria-valuemin="0" aria-valuemax="24" id="bar"><div id="bar-fill"></div></div>
+        <p id="progress"></p>
+        <p id="countdown" class="countdown"></p>
+      </aside>
+    </header>
+
+    <section class="howto" aria-labelledby="howto-title">
+      <h2 id="howto-title" class="section-title">So funktioniert's (30 Sekunden)</h2>
+      <ol class="steps">
+        <li><span>🔓</span><b>Jeden Tag ein Türchen</b><p>Ab dem 1. Dezember geht täglich eins auf. Verpasste Türchen kannst du jederzeit nachholen.</p></li>
+        <li><span>🧩</span><b>Rätsel knacken</b><p>Jedes Türchen versteckt eine <b>Flagge</b>. Sie sieht so aus: <code>CTRL{BEISPIEL}</code>.</p></li>
+        <li><span>⌨️</span><b>Flagge eintippen</b><p>Stimmt sie, gibt's Punkte, Konfetti und du steigst im Rang auf.</p></li>
+        <li><span>🧰</span><b>Hängst du fest?</b><p>Tipp 1 schubst dich an. Tipp 2 schaltet ein Werkzeug frei, das auf jedem Gerät läuft.</p></li>
+      </ol>
+      <details class="faq">
+        <summary>Fragen und Antworten</summary>
+        <dl>
+          <dt>Was ist eine Flagge?</dt>
+          <dd>So heißt das Lösungswort bei Hacker-Wettbewerben (CTF, „Capture the Flag“). Wer die Flagge findet, hat das Rätsel gelöst.</dd>
+          <dt>Warum lerne ich Hacking?</dt>
+          <dd>Wer Angriffe versteht, kann sich und andere schützen. Sicherheitsforscher werden dafür sogar bezahlt. Bei jedem Türchen steht, was du gelernt hast.</dd>
+          <dt>Ist das legal?</dt>
+          <dd>Ja. Alles läuft nur auf dieser Seite. Hacke aber nie fremde Geräte oder Konten, auch nicht aus Spaß.</dd>
+          <dt>Brauche ich Vorkenntnisse oder Programme?</dt>
+          <dd>Nein. Die ersten Türchen sind leicht, danach wird es Schritt für Schritt kniffliger. Ein Handy reicht, die Werkzeuge sind eingebaut.</dd>
+          <dt>Handy-Modus oder PC-Modus?</dt>
+          <dd>Die Seite wählt automatisch, was zu deinem Gerät passt, du kannst oben umschalten. <b>Handy-Modus:</b> Alle Werkzeuge sind eingebaut, kein F12 nötig. <b>PC-Modus:</b> Du nutzt die echten Browser-Werkzeuge wie ein Profi (F12, Cookies, Quelltext).</dd>
+          <dt>Was ist ein Tipp 2?</dt>
+          <dd>Er verrät fast die Lösung und schaltet das Werkzeug zum Türchen frei, zum Beispiel einen Decoder. Probier erst selbst, das macht mehr Spaß!</dd>
+        </dl>
+      </details>
+    </section>
+
+    <main>
+      <h2 class="section-title">Deine 24 Türchen</h2>
+      <div id="grid" class="grid"></div>
+    </main>
+
+    <section id="finale" class="finale" hidden>
+      <h2>🎉 GRINCH.EXE BESIEGT! 🎉</h2>
+      <p>Du hast alle 24 Türchen geknackt. Weihnachten ist gerettet und du bist jetzt offiziell <b>Hacker-Azubi</b>.</p>
+      <button id="share" type="button" class="btn">Ergebnis kopieren und teilen</button>
+    </section>
+
+    <footer>
+      <p>Hacke niemals fremde Systeme. Echte Hacker fragen vorher um Erlaubnis und helfen, Dinge sicherer zu machen. 🛡️</p>
+      <p><a id="tiktok" href="#">Folge ctrl+Derek auf TikTok</a> · <button id="reset" type="button" class="linklike">Fortschritt zurücksetzen</button></p>
+    </footer>
+  </div>
+
+  <dialog id="dialog">
+    <div class="sheet-handle" aria-hidden="true"></div>
+    <form method="dialog"><button class="close" aria-label="Schließen">✕</button></form>
+    <p class="lvl" id="d-level"></p>
+    <h2 id="d-title"></h2>
+    <p id="d-story" class="story"></p>
+    <div id="d-task" class="task"></div>
+
+    <div class="hints">
+      <button type="button" id="btn-hint1">💡 Tipp 1</button>
+      <button type="button" id="btn-hint2" disabled>🆘 Tipp 2</button>
+    </div>
+    <p id="d-hint1" class="hint" hidden></p>
+    <p id="d-hint2" class="hint" hidden></p>
+    <div id="d-tools" class="tools" hidden></div>
+
+    <form id="flag-form" autocomplete="off">
+      <input id="flag" placeholder="CTRL{...}" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="go" aria-label="Flagge eingeben">
+      <button type="submit" class="btn">Prüfen</button>
+    </form>
+    <p id="result" role="status"></p>
+    <p id="d-learn" class="learn" hidden></p>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

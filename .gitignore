@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+.vscode/
+# Lösungen im Klartext, nur lokal behalten
+tools/build_doors.py

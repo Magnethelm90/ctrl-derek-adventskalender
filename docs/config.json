@@ -1,0 +1,16 @@
+{
+  "title": "ctrl+Derek Adventskalender",
+  "year": 2026,
+  "month": 12,
+  "tiktok": "https://www.tiktok.com/",
+  "intro": "ALARM! 🚨 Grinch.exe hat Dereks Weihnachts-Server gehackt und alle Geschenke verschlüsselt. Du bist Hacker-Azubi und knackst jeden Tag ein Türchen, um Weihnachten zu retten. Alles hier ist legal und läuft nur auf dieser Seite. Los geht's!",
+  "ranks": [
+    { "from": 0, "name": "Noob" },
+    { "from": 3, "name": "Script-Kiddie" },
+    { "from": 6, "name": "Bit-Lehrling" },
+    { "from": 10, "name": "Code-Knacker" },
+    { "from": 15, "name": "Cyber-Detektiv" },
+    { "from": 20, "name": "Elite-Hacker" },
+    { "from": 24, "name": "Legende 👑" }
+  ]
+}

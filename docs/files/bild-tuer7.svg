@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="300" height="200" viewBox="0 0 300 200">
+  <title>Ein ganz normales Bild</title>
+  <desc>Hier steckt mehr drin: CTRL{BILDER_HABEN_GEHEIMNISSE}</desc>
+  <rect width="300" height="200" fill="#121a23"/>
+  <circle cx="150" cy="100" r="60" fill="#00ff9c"/>
+  <text x="150" y="108" font-family="monospace" font-size="22" text-anchor="middle" fill="#0b0f14">ctrl+Derek</text>
+</svg>

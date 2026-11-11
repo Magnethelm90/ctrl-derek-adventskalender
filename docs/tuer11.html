@@ -1,0 +1,11 @@
+﻿<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>VIP-Bereich</title><link rel="stylesheet" href="style.css"></head>
+<body><main><h1>VIP-Bereich</h1><p id="t"></p><p><a href="./">Zurück zum Kalender</a></p></main>
+<script>
+function getCookie(n){const m=document.cookie.match(new RegExp("(?:^|; )"+n+"=([^;]*)"));return m?decodeURIComponent(m[1]):null;}
+if(getCookie("rolle")===null){document.cookie="rolle=gast; path=/; SameSite=Lax";}
+const r=getCookie("rolle");
+document.getElementById("t").textContent = r==="admin"
+  ? "ACCESS GRANTED 🍪 Willkommen im VIP-Bereich! Deine Flagge: CTRL{COOKIES_SIND_AENDERBAR}"
+  : "Du bist als \""+r+"\" angemeldet. Nur Admins dürfen hier rein. Dein Cookie verrät dich 👀";
+</script></body></html>
+
