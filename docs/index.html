@@ -4,12 +4,12 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
-  <meta name="theme-color" content="#070b10">
+  <meta name="theme-color" content="#122420">
   <meta name="description" content="24 Türchen, 24 Hacking-Rätsel. Knack jeden Tag ein Türchen und rette Weihnachten vor Grinch.exe. Legal, kostenlos, ab 11.">
   <meta property="og:title" content="ctrl+Derek Hacking-Adventskalender">
   <meta property="og:description" content="24 Türchen, 24 Hacking-Rätsel. Rette Weihnachten vor Grinch.exe!">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23070b10'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' font-family='monospace' font-weight='700' fill='%2300ff9c'%3E%3E_%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23122420'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' font-family='monospace' font-weight='700' fill='%23e8a93b'%3E%3E_%3C/text%3E%3C/svg%3E">
   <title>ctrl+Derek Adventskalender</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -18,19 +18,15 @@
   <canvas id="confetti" aria-hidden="true"></canvas>
 
   <div class="wrap">
-    <nav class="themes modes" aria-label="Modus wählen">
+    <nav class="modes" aria-label="Modus wählen">
       <button type="button" data-mode="mobile">📱 Handy-Modus</button>
       <button type="button" data-mode="pc">💻 PC-Modus</button>
     </nav>
-    <nav class="themes" aria-label="Design wählen">
-      <button type="button" data-theme="terminal">💚 Terminal</button>
-      <button type="button" data-theme="winter">❄️ Winter</button>
-      <button type="button" data-theme="arcade">🕹️ Arcade</button>
-    </nav>
     <header class="hero">
       <div class="hero-main">
-        <p class="badge">🎄 Hacking-Adventskalender</p>
-        <h1 class="glitch" data-text="ctrl+Derek">ctrl<span>+</span>Derek</h1>
+        <p class="badge">Der Hacking-Adventskalender</p>
+        <h1>ctrl<span>+</span>Derek</h1>
+        <svg class="tree-row" viewBox="0 0 420 60" aria-hidden="true" fill="currentColor"><g opacity=".55"><path d="M20 58l14-30 14 30zM28 40l6-14 6 14z"/><path d="M80 58l10-22 10 22z"/></g><path d="M150 58l22-46 22 46z"/><path d="M168 36l4-10 4 10z" fill="#122420"/><rect x="169" y="58" width="6" height="2"/><g opacity=".55"><path d="M250 58l12-26 12 26z"/><path d="M300 58l16-34 16 34z"/><path d="M360 58l10-22 10 22z"/></g><circle cx="172" cy="8" r="3" fill="#e8a93b"/></svg>
         <p id="intro" class="terminal" aria-live="polite"></p>
       </div>
 
@@ -52,10 +48,10 @@
     <section class="howto" aria-labelledby="howto-title">
       <h2 id="howto-title" class="section-title">So funktioniert's (30 Sekunden)</h2>
       <ol class="steps">
-        <li><span>🔓</span><b>Jeden Tag ein Türchen</b><p>Ab dem 1. Dezember geht täglich eins auf. Verpasste Türchen kannst du jederzeit nachholen.</p></li>
-        <li><span>🧩</span><b>Rätsel knacken</b><p>Jedes Türchen versteckt eine <b>Flagge</b>. Sie sieht so aus: <code>CTRL{BEISPIEL}</code>.</p></li>
-        <li><span>⌨️</span><b>Flagge eintippen</b><p>Stimmt sie, gibt's Punkte, Konfetti und du steigst im Rang auf.</p></li>
-        <li><span>🧰</span><b>Hängst du fest?</b><p>Tipp 1 schubst dich an. Tipp 2 schaltet ein Werkzeug frei, das auf jedem Gerät läuft.</p></li>
+        <li><b>Jeden Tag ein Türchen</b><p>Ab dem 1. Dezember geht täglich eins auf. Verpasste Türchen kannst du jederzeit nachholen.</p></li>
+        <li><b>Rätsel knacken</b><p>Jedes Türchen versteckt eine <b>Flagge</b>. Sie sieht so aus: <code>CTRL{BEISPIEL}</code>.</p></li>
+        <li><b>Flagge eintippen</b><p>Stimmt sie, gibt's Punkte, Konfetti und du steigst im Rang auf.</p></li>
+        <li><b>Hängst du fest?</b><p>Tipp 1 schubst dich an. Tipp 2 schaltet ein Werkzeug frei, das auf jedem Gerät läuft.</p></li>
       </ol>
       <details class="faq">
         <summary>Fragen und Antworten</summary>

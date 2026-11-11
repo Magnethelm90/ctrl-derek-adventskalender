@@ -79,16 +79,15 @@ function loop() {
   if (!raf) ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
 
-/* ---------- Designs (3 Versionen) und Schnee ---------- */
-const THEMES = { terminal: { color: "#070b10", flakes: 40 }, winter: { color: "#e9f3ff", flakes: 110 }, arcade: { color: "#150a30", flakes: 0 } };
+/* ---------- Leichter Schnee ---------- */
 const snowCv = $("snow"), sctx = snowCv.getContext("2d");
-let flakes = [], snowOn = false, snowColor = "#fff";
+let flakes = [], snowOn = false;
 function fitSnow() { snowCv.width = innerWidth; snowCv.height = innerHeight; }
 addEventListener("resize", fitSnow); fitSnow();
 function snowLoop() {
   if (!snowOn) return;
   sctx.clearRect(0, 0, snowCv.width, snowCv.height);
-  sctx.fillStyle = snowColor;
+  sctx.fillStyle = "#fff";
   for (const f of flakes) {
     f.y += f.v; f.x += Math.sin((f.y + f.p) / 40) * 0.4;
     if (f.y > snowCv.height + 5) { f.y = -5; f.x = Math.random() * snowCv.width; }
@@ -96,24 +95,10 @@ function snowLoop() {
   }
   requestAnimationFrame(snowLoop);
 }
-function setSnow(count) {
-  snowOn = false;
-  sctx.clearRect(0, 0, snowCv.width, snowCv.height);
-  if (reduceMotion || !count) return;
-  snowColor = getComputedStyle(document.documentElement).getPropertyValue("--snow").trim() || "#fff";
-  flakes = Array.from({ length: count }, () => ({ x: Math.random() * snowCv.width, y: Math.random() * snowCv.height, r: 1 + Math.random() * 2.4, v: 0.4 + Math.random() * 1.1, p: Math.random() * 100, a: 0.35 + Math.random() * 0.5 }));
+if (!reduceMotion) {
+  flakes = Array.from({ length: 45 }, () => ({ x: Math.random() * snowCv.width, y: Math.random() * snowCv.height, r: 1 + Math.random() * 2, v: 0.3 + Math.random() * 0.8, p: Math.random() * 100, a: 0.2 + Math.random() * 0.35 }));
   snowOn = true; snowLoop();
 }
-function applyTheme(name) {
-  if (!THEMES[name]) name = "terminal";
-  document.documentElement.dataset.theme = name;
-  document.querySelector('meta[name="theme-color"]')?.setAttribute("content", THEMES[name].color);
-  document.querySelectorAll(".themes button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.theme === name)));
-  save("theme", name);
-  setSnow(THEMES[name].flakes);
-}
-document.querySelectorAll(".themes button").forEach((b) => (b.onclick = () => applyTheme(b.dataset.theme)));
-applyTheme(params.get("theme") || load("theme", "terminal"));
 
 /* ---------- Modus: Handy (alles eingebaut) oder PC (echte Browser-Werkzeuge) ---------- */
 const PC_ONLY_TOOLS = new Set(["source", "file", "cookie", "run", "robots", "urlparam"]); // am PC macht man das mit F12
@@ -268,7 +253,7 @@ function buildTools(d, box) {
 
   function openDoor(d) {
     current = d; hintStep = 0;
-    $("d-level").textContent = "Schwierigkeit: " + "🔥".repeat(d.level) + "  ·  " + xpOf(d) + " XP";
+    $("d-level").textContent = "Schwierigkeit: " + "★".repeat(d.level) + "  ·  " + xpOf(d) + " XP";
     $("d-title").textContent = `${d.icon} Türchen ${d.door}: ${d.title}`;
     $("d-story").textContent = d.story;
     const needsDevtools = (d.tools || []).some((t) => PC_ONLY_TOOLS.has(t));
