@@ -1,9 +1,3 @@
-﻿<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Mitarbeiterbereich</title><link rel="stylesheet" href="style.css"></head>
+<!doctype html><html lang="de"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'"><meta name="referrer" content="no-referrer"><meta name="robots" content="noindex"><title>Mitarbeiterbereich</title><link rel="stylesheet" href="style.css?v=4"></head>
 <body><main><h1>Mitarbeiterbereich</h1><p id="t"></p><p><a href="./">Zurück zum Kalender</a></p></main>
-<script>
-const rolle = new URLSearchParams(location.search).get("rolle");
-document.getElementById("t").textContent = rolle === "admin"
-  ? "ACCESS GRANTED 😎 Willkommen, Admin! Deine Flagge: CTRL{URL_IST_MANIPULIERBAR}"
-  : "Hey " + (rolle || "Unbekannt") + "! 👋 Als " + (rolle || "Unbekannter") + " siehst du hier gar nichts. Nur Admins dürfen rein.";
-</script></body></html>
-
+<script src="tuer10.js"></script></body></html>

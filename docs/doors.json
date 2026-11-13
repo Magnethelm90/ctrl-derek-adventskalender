@@ -1,7 +1,7 @@
 [
   {
     "door": 1,
-    "icon": "🔐",
+    "icon": "lock",
     "title": "Der Zettel von Grinch.exe",
     "level": 1,
     "story": "Grinch.exe hat Dereks Server gehackt und alle Geschenke verschlüsselt. Auf dem Bildschirm blinkt nur diese Nachricht:",
@@ -12,41 +12,52 @@
     "hash": "b40d72a48cfa3d380e575afd89d9a5ff5b6118149d30ca28614222cf08c48b3f",
     "tools": [
       "caesar"
+    ],
+    "fill": [
+      "KDOOR_KDFNHU"
     ]
   },
   {
     "door": 2,
-    "icon": "🕵️",
+    "icon": "hash",
     "title": "Fake-Geheimcode",
     "level": 1,
     "story": "Grinch.exe hat einen komischen Text auf dem Server hinterlassen. Sieht nach Hackersprache aus. Aber ist das wirklich ein Geheimnis?",
     "task": "<p><code>Q1RSTHtCQVNFNjRfSVNUX0tFSU5FX1ZFUlNDSExVRVNTRUxVTkd9</code></p><p>Finde heraus, was dahintersteckt. Die Flagge steckt schon im Text.</p>",
-    "hint": "Buchstaben und Zahlen, oft mit = am Ende: Das ist Base64. Such nach „Base64 decode“.",
-    "hint2": "Kopiere den Text in einen Online-Base64-Decoder. Was rauskommt, ist direkt die Flagge.",
+    "hint": "Große und kleine Buchstaben und Zahlen wild gemischt: Das ist Base64. Such nach „Base64 decode“.",
+    "hint2": "Steck den Text in den Base64-Decoder unten. Was rauskommt, ist direkt die Flagge.",
     "learn": "Base64 ist KEINE Verschlüsselung, nur eine andere Schreibweise. Jeder kann es ohne Passwort zurückübersetzen. Wer damit Passwörter „schützt“, wird gehackt.",
     "hash": "5bb4837cec9fd118459b25a99514fcdf8c503a3eeba83851fa0bf6092bdf4a30",
     "tools": [
       "base64"
+    ],
+    "fill": [
+      "Q1RSTHtCQVNFNjRfSVNUX0tFSU5FX1ZFUlNDSExVRVNTRUxVTkd9"
     ]
   },
   {
     "door": 3,
-    "icon": "👀",
+    "icon": "code",
     "title": "Röntgenblick für Webseiten",
     "level": 1,
     "story": "Grinch.exe versteckt sich auch auf Webseiten. Dafür brauchst du jetzt den Röntgenblick deines Browsers.",
-    "task": "<p>Diese Karte sieht ganz normal aus. Aber Webseiten bestehen aus viel mehr, als du siehst.</p><p>Drücke <b>F12</b> (oder Rechtsklick, dann <i>Untersuchen</i>) und schau dir den Code dieser Karte an. Irgendwas hat Grinch.exe hier vergessen 👀</p><!-- Flagge: CTRL{F12_ZEIGT_ALLES} -->",
+    "task": "<p>Diese Karte sieht ganz normal aus. Aber Webseiten bestehen aus viel mehr, als du siehst.</p><p>Drücke <b>F12</b> (oder Rechtsklick, dann <i>Untersuchen</i>) und schau dir den Code dieser Karte an. Irgendwas hat Grinch.exe hier vergessen</p><!-- Flagge: CTRL{F12_ZEIGT_ALLES} -->",
     "hint": "Öffne im Entwicklerwerkzeug den Reiter „Elements“ und such nach grauem Text, der mit <!-- anfängt. Das ist ein Kommentar.",
     "hint2": "Klappe in „Elements“ die Karte mit der Aufgabe auf. Ganz unten steht ein grauer Kommentar mit der Flagge.",
     "learn": "Alles, was dein Browser bekommt, kannst du auch lesen. Geheimnisse gehören nie in den Code einer Webseite.",
     "hash": "c6a4f47ad6c62a01905332ab9ef3dd08695a54ba0a9a7e4065db58ab269e8827",
     "tools": [
       "source"
-    ]
+    ],
+    "fill": [
+      ""
+    ],
+    "hintM": "Am Handy gibt es kein F12. Dafür bekommst du mit Tipp 2 eine Quelltext-Ansicht. Such darin nach einem Kommentar, der mit <!-- anfängt.",
+    "hint2M": "Tippe unten auf „Quelltext anzeigen“. Ganz am Ende steht ein Kommentar, der mit <!-- anfängt. Darin steckt die Flagge."
   },
   {
     "door": 4,
-    "icon": "🟩",
+    "icon": "grid",
     "title": "Matrix-Modus",
     "level": 2,
     "story": "Auf Dereks Festplatte liegt eine Datei, die nur aus Zahlen und den Buchstaben A bis F besteht. Wie in der Matrix.",
@@ -57,11 +68,14 @@
     "hash": "eb476f5df2810cccdd7b96f10aec9dc2b7987328f5dd6e9f0efbc8066f562529",
     "tools": [
       "hex"
+    ],
+    "fill": [
+      "43 54 52 4C 7B 48 45 58 5F 49 53 54 5F 4C 45 49 43 48 54 7D"
     ]
   },
   {
     "door": 5,
-    "icon": "🚫",
+    "icon": "ban",
     "title": "Betreten verboten!",
     "level": 2,
     "story": "Auf Grinch.exes Webseite steht überall: „Bitte nicht reinschauen“. Hacker lieben solche Schilder.",
@@ -72,11 +86,16 @@
     "hash": "b8b1b4165aa53f8159eb23dc6b68244acf8b06c10e0e1a9c54050e3a3e4627bc",
     "tools": [
       "robots"
-    ]
+    ],
+    "fill": [
+      ""
+    ],
+    "hintM": "Tippe oben in die Adresszeile und hänge robots.txt hinten an die Adresse (nach dem letzten Schrägstrich). Dort steht ein Dateiname.",
+    "hint2M": "Tippe unten auf „Datei öffnen“. In der robots.txt steht ein Dateiname. Schreib ihn ins Feld und öffne ihn genauso."
   },
   {
     "door": 6,
-    "icon": "📡",
+    "icon": "radio",
     "title": "Funkspruch vom Nordpol",
     "level": 2,
     "story": "Ein Funkspruch kommt rein. Der Weihnachtsmann ist in Gefahr und kann nur piepen!",
@@ -87,26 +106,34 @@
     "hash": "1a197ca12f9962a6d1acedc3dd8bd4427400ef06abc58d01775444247c3e42c4",
     "tools": [
       "morse"
+    ],
+    "fill": [
+      "..-. ..- -. -.- ... .--. .-. ..- -.-. ...."
     ]
   },
   {
     "door": 7,
-    "icon": "📸",
+    "icon": "image",
     "title": "Das Bild mit Extras",
     "level": 2,
     "story": "Grinch.exe hat ein Bild geschickt. Es sieht harmlos aus, aber Bilder können mehr verraten, als man denkt.",
     "task": "<p>Hier ist das Bild: <a href='files/bild-tuer7.svg' target='_blank'>bild-tuer7.svg</a></p><p>Es steckt etwas Verstecktes drin. Schau genauer hin.</p>",
-    "hint": "Dieses Bild besteht aus Text. Öffne die Datei mit F12 oder mit dem Editor und such nach „desc“.",
-    "hint2": "Rechtsklick auf die Datei, „Quelltext anzeigen“. Zwischen den Tags steht die Flagge.",
+    "hint": "Dieses Bild besteht in Wahrheit aus Text. Schau dir den Quelltext der Bilddatei an und such nach dem Wort „desc“.",
+    "hint2": "Öffne das Bild über den Link. Dann Rechtsklick und „Seitenquelltext anzeigen“ (oder Strg+U). In der Zeile mit desc steht die Flagge.",
     "learn": "Fotos verraten oft Ort, Zeit und Handymodell. Entferne Metadaten, bevor du Bilder öffentlich teilst.",
     "hash": "1831a326b21bf264ad282508dc84df6347cb037d660b2b91bbbffc2c71a1b046",
     "tools": [
       "file"
-    ]
+    ],
+    "fill": [
+      ""
+    ],
+    "hintM": "Dieses Bild besteht in Wahrheit aus Text. Darin steht eine Beschreibung, die man im Bild selbst nicht sieht.",
+    "hint2M": "Tippe unten auf „Datei als Text öffnen“ und such nach dem Wort desc. Direkt dahinter steht die Flagge."
   },
   {
     "door": 8,
-    "icon": "🥊",
+    "icon": "shield",
     "title": "Passwort-Battle",
     "level": 2,
     "story": "Grinch.exe will in Dereks Konto. Er probiert die beliebtesten Passwörter der Welt. Welches hält nicht mal eine Sekunde?",
@@ -118,7 +145,7 @@
   },
   {
     "door": 9,
-    "icon": "📶",
+    "icon": "wifi",
     "title": "Router-Fail",
     "level": 2,
     "story": "In Dereks Keller steht ein alter Router, der nie eingerichtet wurde. Grinch.exe ist schon dran.",
@@ -130,7 +157,7 @@
   },
   {
     "door": 10,
-    "icon": "🎭",
+    "icon": "link",
     "title": "Admin für 10 Sekunden",
     "level": 2,
     "story": "Grinch.exe hat sich Zugang zum Mitarbeiterbereich gebaut. Er hält dich für einen Gast. Das ändern wir.",
@@ -141,11 +168,16 @@
     "hash": "a74d8c34c77586870d0949a3eeab2431aed2bd3929c76b43d3ca269c3828256a",
     "tools": [
       "urlparam"
-    ]
+    ],
+    "fill": [
+      ""
+    ],
+    "hintM": "Hinter dem Fragezeichen in der Adresse steht rolle=gast. Probiere ein anderes Wort für die Rolle.",
+    "hint2M": "Nutze unten den Adress-Änderer: Schreib admin statt gast und öffne die Seite."
   },
   {
     "door": 11,
-    "icon": "🍪",
+    "icon": "cookie",
     "title": "Keks-Dieb",
     "level": 2,
     "story": "Grinch.exe hat einen Cookie in deinem Browser gelassen. Und du kannst ihn gegen ihn verwenden.",
@@ -156,11 +188,16 @@
     "hash": "ecdf5a305201ddab4fc11bc43f31264ae57c7fa1d735e151b5279279b60ee9c2",
     "tools": [
       "cookie"
-    ]
+    ],
+    "fill": [
+      ""
+    ],
+    "hintM": "Die Seite hat in deinem Browser einen Cookie namens „rolle“ mit dem Wert „gast“ gespeichert. Den Wert kannst du ändern.",
+    "hint2M": "Schreib unten in den Cookie-Editor admin und tippe auf „Cookie speichern“. Öffne danach den VIP-Bereich noch einmal."
   },
   {
     "door": 12,
-    "icon": "📜",
+    "icon": "scroll",
     "title": "Das Gedicht mit Hintergedanken",
     "level": 2,
     "story": "Grinch.exe schreibt jetzt Gedichte. Aber nicht aus Liebe zur Kunst.",
@@ -172,7 +209,7 @@
   },
   {
     "door": 13,
-    "icon": "🎣",
+    "icon": "mail",
     "title": "Fake oder echt?",
     "level": 2,
     "story": "Grinch.exe verschickt Phishing-Mails an alle Elfen. Eine von diesen dreien ist ein Fake:",
@@ -184,7 +221,7 @@
   },
   {
     "door": 14,
-    "icon": "🧬",
+    "icon": "database",
     "title": "Hash-Jäger",
     "level": 3,
     "story": "Du hast Grinch.exes Passwort-Datenbank gefunden. Aber es steht nur ein Fingerabdruck drin:",
@@ -196,22 +233,25 @@
   },
   {
     "door": 15,
-    "icon": "✨",
+    "icon": "xor",
     "title": "Der XOR-Zaubertrick",
     "level": 3,
     "story": "Grinch.exe nutzt einen Zaubertrick, der in fast jeder Verschlüsselung steckt: XOR.",
-    "task": "<p>Jedes Byte wurde mit dem Schlüssel <code>42</code> verknüpft (XOR):</p><p><code>69 7E 78 66 51 72 65 78 75 63 79 7E 75 7F 67 61 6F 62 78 68 6B 78 57</code></p><p>Wie machst du das rückgängig?</p>",
+    "task": "<p>Jedes Byte wurde mit dem Schlüssel <code>42</code> verknüpft (XOR). Gemeint ist die ganz normale Zahl 42:</p><p><code>69 7E 78 66 51 72 65 78 75 63 79 7E 75 7F 67 61 6F 62 78 68 6B 78 57</code></p><p>Wie machst du das rückgängig?</p>",
     "hint": "XOR ist umkehrbar: Wendest du es noch einmal mit 42 an, kommt der Klartext raus.",
-    "hint2": "Nimm CyberChef (Eingabe: Hex, Rezept: XOR, Schlüssel 42) oder schreib ein kleines Programm.",
+    "hint2": "Nutze den XOR-Rechner unten: Hex-Zahlen rein, Schlüssel 42, fertig. Falls du CyberChef nimmst: Stell beim Schlüssel „Decimal“ ein.",
     "learn": "XOR steckt in fast jeder modernen Verschlüsselung. Der Trick: Zweimal anwenden macht es wieder rückgängig.",
     "hash": "a0e7493bb6863bfd020736907e1eb9f75cd37f86157fd3ea2fd9196dadb211b6",
     "tools": [
       "xor"
+    ],
+    "fill": [
+      "69 7E 78 66 51 72 65 78 75 63 79 7E 75 7F 67 61 6F 62 78 68 6B 78 57"
     ]
   },
   {
     "door": 16,
-    "icon": "🔑",
+    "icon": "key",
     "title": "Caesar 2.0",
     "level": 3,
     "story": "Grinch.exe hat seine Verschlüsselung verbessert. Das Schlüsselwort ist der Name von diesem Kanal.",
@@ -222,11 +262,14 @@
     "hash": "4369b3eb5bf5bb6e02f929b3be7cce3897c162bf09a8895a7c8994ef0dc3fbcc",
     "tools": [
       "vigenere"
+    ],
+    "fill": [
+      "KETOOUWTLEOI"
     ]
   },
   {
     "door": 17,
-    "icon": "💾",
+    "icon": "binary",
     "title": "Binär-Challenge",
     "level": 3,
     "story": "Grinch.exe spricht jetzt nur noch Computer: Nullen und Einsen.",
@@ -237,11 +280,14 @@
     "hash": "6935b596c04c17f2a682047ba28ad3e26d884915a24742f17209ae1fbe0fd3a9",
     "tools": [
       "binary"
+    ],
+    "fill": [
+      "01000010 01001001 01001110 01000001 01000101 01010010 01011111 01001011 01000001 01001110 01001110 01011111 01001010 01000101 01000100 01000101 01010010"
     ]
   },
   {
     "door": 18,
-    "icon": "☕",
+    "icon": "coffee",
     "title": "Der Café-Lauscher",
     "level": 3,
     "story": "Im Café-WLAN sitzt ein Hacker und liest mit. Das ist sein Mitschnitt vom WLAN (alles unverschlüsselt, nur ein Beispiel zum Lernen):",
@@ -253,22 +299,27 @@
   },
   {
     "door": 19,
-    "icon": "🧑‍💻",
+    "icon": "terminal",
     "title": "Code lesen wie ein Profi",
     "level": 3,
     "story": "Grinch.exe hat ein kleines Programm geschrieben. Was macht es?",
     "task": "<pre>const a = [66, 83, 81, 75, 122, 73, 82, 94, 72, 82, 83, 94, 77, 72, 66, 71, 83, 94, 73, 64, 85, 64, 124];\nconsole.log(a.map(n =&gt; String.fromCharCode(n + 1)).join(&quot;&quot;));</pre><p>Lies den Code oder führe ihn aus. Was kommt raus?</p>",
-    "hint": "F12, Reiter „Konsole“, Code einfügen, Enter. Fertig.",
+    "hint": "F12, Reiter „Konsole“, Code einfügen, Enter. Chrome blockt das Einfügen beim ersten Mal: Tippe dann „allow pasting“ ein, drück Enter und füge den Code nochmal ein.",
     "hint2": "Jede Zahl plus 1 ergibt den Code eines Buchstabens. Das Programm macht das für dich.",
     "learn": "Wer Code lesen kann, versteht, was Programme tun, und findet auch Fehler in ihnen. Das ist die halbe Miete beim Hacken.",
     "hash": "b48866819dc89fe5eff0acedf2f8af82b9f536650254b87aa3f67d44950fd4e9",
     "tools": [
       "run"
-    ]
+    ],
+    "fill": [
+      ""
+    ],
+    "hintM": "Lies den Code: Zu jeder Zahl wird 1 addiert, dann wird sie in ein Zeichen verwandelt. 66 + 1 = 67, und 67 ist ein C.",
+    "hint2M": "Tippe unten auf „Ausführen“. Das Programm läuft dann für dich und zeigt die Flagge."
   },
   {
     "door": 20,
-    "icon": "🔎",
+    "icon": "search",
     "title": "Öffentliche Spuren",
     "level": 3,
     "story": "Grinch.exe fragt sich: Wie komme ich an Lenas Passwort? Lena ist eine erfundene Person. Sie hat aber Fehler gemacht, die viele im echten Leben machen.",
@@ -280,7 +331,7 @@
   },
   {
     "door": 21,
-    "icon": "🚪",
+    "icon": "phone",
     "title": "Der Türsteher: 2FA",
     "level": 3,
     "story": "Grinch.exe hat Dereks Passwort geklaut. Er kommt trotzdem nicht rein. Warum?",
@@ -292,7 +343,7 @@
   },
   {
     "door": 22,
-    "icon": "🧩",
+    "icon": "chart",
     "title": "Mustererkennung",
     "level": 3,
     "story": "Der Tresor von Grinch.exe hat zwei Zahlenreihen. Hacker erkennen Muster, die andere übersehen.",
@@ -304,7 +355,7 @@
   },
   {
     "door": 23,
-    "icon": "🪆",
+    "icon": "layers",
     "title": "Matroschka",
     "level": 3,
     "story": "Grinch.exe packt Geheimnisse in Geheimnisse, wie eine russische Puppe. Morgen kommt der Endgegner, das ist dein Aufwärmen.",
@@ -316,11 +367,15 @@
     "tools": [
       "hex",
       "base64"
+    ],
+    "fill": [
+      "51 31 52 53 54 48 74 61 56 30 56 4A 58 31 4E 44 53 45 6C 44 53 46 52 46 54 6E 30 3D",
+      ""
     ]
   },
   {
     "door": 24,
-    "icon": "👾",
+    "icon": "bug",
     "title": "Endgegner: Grinch.exe",
     "level": 3,
     "story": "Das ist der letzte Kampf! Grinch.exe hat seine Flagge in drei Teile zerlegt und jeden Teil anders versteckt. Zeig ihm, was du kannst.",
@@ -333,6 +388,11 @@
       "caesar",
       "base64",
       "hex"
+    ],
+    "fill": [
+      "",
+      "",
+      ""
     ]
   }
 ]

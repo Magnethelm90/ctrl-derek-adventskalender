@@ -3,15 +3,16 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'">
+  <meta name="referrer" content="no-referrer">
   <meta name="theme-color" content="#122420">
   <meta name="description" content="24 Türchen, 24 Hacking-Rätsel. Knack jeden Tag ein Türchen und rette Weihnachten vor Grinch.exe. Legal, kostenlos, ab 11.">
   <meta property="og:title" content="ctrl+Derek Hacking-Adventskalender">
   <meta property="og:description" content="24 Türchen, 24 Hacking-Rätsel. Rette Weihnachten vor Grinch.exe!">
   <meta property="og:type" content="website">
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='22' fill='%23122420'/%3E%3Ctext x='50' y='66' font-size='54' text-anchor='middle' font-family='monospace' font-weight='700' fill='%23e8a93b'%3E%3E_%3C/text%3E%3C/svg%3E">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='4' y='10' width='56' height='50' rx='12' fill='%231c2824'/%3E%3Crect x='4' y='4' width='56' height='48' rx='12' fill='%23f0ad35' stroke='%231c2824' stroke-width='4'/%3E%3Cpath d='M22 20l-9 8 9 8M42 20l9 8-9 8M35 16l-6 24' fill='none' stroke='%231c2824' stroke-width='5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
   <title>ctrl+Derek Adventskalender</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=4">
 </head>
 <body>
   <canvas id="snow" aria-hidden="true"></canvas>
@@ -19,14 +20,14 @@
 
   <div class="wrap">
     <nav class="modes" aria-label="Modus wählen">
-      <button type="button" data-mode="mobile">📱 Handy-Modus</button>
-      <button type="button" data-mode="pc">💻 PC-Modus</button>
+      <button type="button" data-mode="mobile"><span data-icon="phone"></span>Handy-Modus</button>
+      <button type="button" data-mode="pc"><span data-icon="monitor"></span>PC-Modus</button>
     </nav>
     <header class="hero">
       <div class="hero-main">
-        <p class="badge">Der Hacking-Adventskalender</p>
-        <h1>ctrl<span>+</span>Derek</h1>
-        <svg class="tree-row" viewBox="0 0 420 60" aria-hidden="true" fill="currentColor"><g opacity=".55"><path d="M20 58l14-30 14 30zM28 40l6-14 6 14z"/><path d="M80 58l10-22 10 22z"/></g><path d="M150 58l22-46 22 46z"/><path d="M168 36l4-10 4 10z" fill="#122420"/><rect x="169" y="58" width="6" height="2"/><g opacity=".55"><path d="M250 58l12-26 12 26z"/><path d="M300 58l16-34 16 34z"/><path d="M360 58l10-22 10 22z"/></g><circle cx="172" cy="8" r="3" fill="#e8a93b"/></svg>
+        <p class="badge">Hacking-Adventskalender 2026</p>
+        <h1 aria-label="ctrl+Derek"><kbd>ctrl</kbd><span>+</span><kbd>Derek</kbd></h1>
+        <p class="claim">24 Türchen. 24 Hacks. Besiege <b>Grinch.exe</b> und rette Weihnachten.</p>
         <p id="intro" class="terminal" aria-live="polite"></p>
       </div>
 
@@ -39,19 +40,62 @@
           <div class="xp"><small>PUNKTE</small><strong id="xp-text">0 XP</strong></div>
         </div>
         <div class="bar" role="progressbar" aria-label="Fortschritt" aria-valuemin="0" aria-valuemax="24" id="bar"><div id="bar-fill"></div></div>
+        <p id="next-rank" class="next"></p>
         <p id="progress"></p>
-        <p id="countdown" class="countdown"></p>
-        <p class="privacy">🔒 Dein Fortschritt wird nur auf deinem Gerät gespeichert, nichts auf einem Server.</p>
+        <p id="countdown" class="countdown" hidden><span data-icon="clock"></span><span id="countdown-text"></span></p>
+
+        <div id="boss" class="boss">
+          <svg class="grinch" viewBox="0 0 120 124" aria-hidden="true">
+            <ellipse cx="60" cy="117" rx="34" ry="5" fill="#000" opacity=".28"/>
+            <g class="g-body">
+              <g stroke="#1c2824" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M20 78H9v12h11M100 70h11v12h-11" fill="#62b03c"/>
+                <rect x="18" y="48" width="84" height="62" rx="18" fill="#7ac74f"/>
+              </g>
+              <path d="M20 88v4a18 18 0 0 0 18 18h44a18 18 0 0 0 18-18v-4a18 18 0 0 1-18 14H38a18 18 0 0 1-18-14z" fill="#5aa636"/>
+              <path d="M30 62a10 10 0 0 1 8-6" fill="none" stroke="#c9f0a8" stroke-width="4" stroke-linecap="round"/>
+              <g stroke="#1c2824" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+                <path d="M24 44C34 14 70 0 96 28l6 20z" fill="#d2452f"/>
+                <path d="M60 14c12 2 24 10 34 22" fill="none" stroke="#a53321" stroke-width="3"/>
+                <rect x="14" y="38" width="92" height="16" rx="8" fill="#f5eddb"/>
+                <circle cx="103" cy="30" r="10" fill="#f5eddb"/>
+              </g>
+              <g class="g-eyes">
+                <g stroke="#1c2824" stroke-width="3.5">
+                  <ellipse cx="43" cy="76" rx="10" ry="9" fill="#fff8d6"/>
+                  <ellipse cx="77" cy="76" rx="10" ry="9" fill="#fff8d6"/>
+                </g>
+                <circle cx="46" cy="77" r="4" fill="#1c2824"/><circle cx="74" cy="77" r="4" fill="#1c2824"/>
+                <circle cx="47.5" cy="75.5" r="1.3" fill="#fff"/><circle cx="75.5" cy="75.5" r="1.3" fill="#fff"/>
+              </g>
+              <g class="g-ko" stroke="#1c2824" stroke-width="4.5" stroke-linecap="round">
+                <path d="M36 70l14 12M50 70 36 82M70 70l14 12M84 70 70 82"/>
+              </g>
+              <path class="g-brows" d="M30 62l24 8M90 62l-24 8" fill="none" stroke="#1c2824" stroke-width="5.5" stroke-linecap="round"/>
+              <g class="g-mouth">
+                <path d="M36 91h48c-3 10-13 15-24 15s-21-5-24-15z" fill="#1c2824" stroke="#1c2824" stroke-width="4" stroke-linejoin="round"/>
+                <path d="M42 93h36l-2 5H44z" fill="#fff"/>
+                <path d="M51 93v5M60 93v5M69 93v5" stroke="#1c2824" stroke-width="2"/>
+              </g>
+            </g>
+          </svg>
+          <div class="boss-info">
+            <div class="boss-top"><b>Grinch.exe</b><span id="boss-hp">24 / 24 HP</span></div>
+            <div class="bar boss-bar"><div id="boss-fill"></div></div>
+            <small>Endgegner. Jedes geknackte Türchen zieht ihm 1 HP ab.</small>
+          </div>
+        </div>
+        <p class="privacy"><span data-icon="lock"></span>Dein Fortschritt wird nur auf deinem Gerät gespeichert, nichts auf einem Server.</p>
       </aside>
     </header>
 
     <section class="howto" aria-labelledby="howto-title">
-      <h2 id="howto-title" class="section-title">So funktioniert's (30 Sekunden)</h2>
+      <h2 id="howto-title" class="section-title">So läuft's</h2>
       <ol class="steps">
         <li><b>Jeden Tag ein Türchen</b><p>Ab dem 1. Dezember geht täglich eins auf. Verpasste Türchen kannst du jederzeit nachholen.</p></li>
         <li><b>Rätsel knacken</b><p>Jedes Türchen versteckt eine <b>Flagge</b>. Sie sieht so aus: <code>CTRL{BEISPIEL}</code>.</p></li>
         <li><b>Flagge eintippen</b><p>Stimmt sie, gibt's Punkte, Konfetti und du steigst im Rang auf.</p></li>
-        <li><b>Hängst du fest?</b><p>Tipp 1 schubst dich an. Tipp 2 schaltet ein Werkzeug frei, das auf jedem Gerät läuft.</p></li>
+        <li><b>Hängst du fest?</b><p>Tipp 1 schubst dich an. Tipp 2 verrät fast alles und schaltet ein Werkzeug frei.</p></li>
       </ol>
       <details class="faq">
         <summary>Fragen und Antworten</summary>
@@ -80,32 +124,33 @@
     </main>
 
     <section id="finale" class="finale" hidden>
-      <h2>🎉 GRINCH.EXE BESIEGT! 🎉</h2>
-      <p>Du hast alle 24 Türchen geknackt. Weihnachten ist gerettet und du bist jetzt offiziell <b>Hacker-Azubi</b>.</p>
+      <h2>Grinch.exe ist besiegt!</h2>
+      <p>Du hast alle 24 Türchen geknackt. Weihnachten ist gerettet und aus dem Hacker-Azubi ist eine <b>Legende</b> geworden.</p>
       <button id="share" type="button" class="btn">Ergebnis kopieren und teilen</button>
     </section>
 
     <footer>
-      <p>Hacke niemals fremde Systeme. Echte Hacker fragen vorher um Erlaubnis und helfen, Dinge sicherer zu machen. 🛡️</p>
-      <p><a id="tiktok" href="#">Folge ctrl+Derek auf TikTok</a> · <button id="reset" type="button" class="linklike">Fortschritt zurücksetzen</button></p>
+      <p>Hacke niemals fremde Systeme. Echte Hacker fragen vorher um Erlaubnis und helfen, Dinge sicherer zu machen.</p>
+      <p><a id="tiktok" href="#" target="_blank" rel="noopener noreferrer">Folge ctrl+Derek auf TikTok</a> · <button id="reset" type="button" class="linklike">Fortschritt zurücksetzen</button></p>
     </footer>
   </div>
 
   <dialog id="dialog">
     <div class="sheet-handle" aria-hidden="true"></div>
-    <form method="dialog"><button class="close" aria-label="Schließen">✕</button></form>
+    <form method="dialog"><button class="close" aria-label="Schließen"><span data-icon="x"></span></button></form>
     <p class="lvl" id="d-level"></p>
-    <h2 id="d-title"></h2>
+    <h2><span id="d-icon" class="d-icon"></span><span id="d-title"></span></h2>
     <p id="d-story" class="story"></p>
     <div id="d-task" class="task"></div>
 
     <div class="hints">
-      <button type="button" id="btn-hint1">💡 Tipp 1</button>
-      <button type="button" id="btn-hint2" disabled>🆘 Tipp 2</button>
+      <button type="button" id="btn-hint1"><span data-icon="bulb"></span>Tipp 1</button>
+      <button type="button" id="btn-hint2" disabled><span data-icon="help"></span><span id="btn-hint2-text">Tipp 2</span></button>
     </div>
     <p id="d-hint1" class="hint" hidden></p>
     <p id="d-hint2" class="hint" hidden></p>
     <div id="d-tools" class="tools" hidden></div>
+    <button type="button" id="btn-force" class="linklike force" hidden>Klappt nicht mit F12? Eingebautes Werkzeug zeigen</button>
 
     <form id="flag-form" autocomplete="off">
       <input id="flag" placeholder="CTRL{...}" spellcheck="false" autocapitalize="characters" autocomplete="off" enterkeyhint="go" aria-label="Flagge eingeben">
@@ -117,6 +162,7 @@
 
   <div id="toast" role="status" aria-live="polite"></div>
 
-  <script src="app.js"></script>
+  <script src="icons.js?v=4"></script>
+  <script src="app.js?v=4"></script>
 </body>
 </html>
