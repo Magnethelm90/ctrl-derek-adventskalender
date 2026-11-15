@@ -155,6 +155,7 @@ h1 span{color:var(--fg)}
 .door.today:not(.solved)::before{content:"";position:absolute;inset:-9px;border:3px solid var(--gold);border-radius:20px;animation:ring 2s var(--out) infinite;pointer-events:none}
 @keyframes ring{from{opacity:.9;scale:.94}to{opacity:0;scale:1.1}}
 .door .tag{position:absolute;top:6px;right:6px;background:var(--ink);color:var(--gold);border-radius:5px;font-size:.58rem;font-weight:800;padding:1px 6px;letter-spacing:.05em}
+.load-error{background:var(--paper);color:var(--ink);border:3px solid var(--ink);border-radius:var(--r);padding:16px 18px;font-weight:700}
 .shake{animation:shake .4s}
 @keyframes shake{20%{translate:-6px 0}40%{translate:6px 0}60%{translate:-4px 0}80%{translate:4px 0}}
 

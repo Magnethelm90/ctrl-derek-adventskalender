@@ -1,4 +1,4 @@
-﻿# Plan: 24 Türchen
+# Plan: 24 Türchen
 
 Empfehlung: erst 8 bis 10 Türchen fertig vorproduzieren, den Rest während der Aktion nachliefern.
 

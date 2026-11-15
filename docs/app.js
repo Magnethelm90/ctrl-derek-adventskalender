@@ -6,14 +6,54 @@ const $ = (id) => document.getElementById(id);
 const reduceMotion = matchMedia("(prefers-reduced-motion: reduce)").matches;
 
 async function sha256(text) {
-  const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+  const data = new TextEncoder().encode(text);
+  // crypto.subtle gibt es nur über https und localhost. Beim Testen im WLAN (http://192.168...) rechnet der Ersatz unten.
+  if (!globalThis.crypto?.subtle) return sha256Fallback(data);
+  const buf = await crypto.subtle.digest("SHA-256", data);
   return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+}
+function sha256Fallback(data) {
+  const K = [], H = [];
+  const frac = (x) => ((x - Math.floor(x)) * 4294967296) >>> 0;
+  for (let n = 2; K.length < 64; n++) {
+    let prime = true;
+    for (let i = 2; i * i <= n; i++) if (n % i === 0) { prime = false; break; }
+    if (!prime) continue;
+    if (H.length < 8) H.push(frac(Math.sqrt(n)));
+    K.push(frac(Math.cbrt(n)));
+  }
+  const len = data.length, total = ((len + 9 + 63) >> 6) << 6;
+  const m = new Uint8Array(total); m.set(data); m[len] = 0x80;
+  const dv = new DataView(m.buffer);
+  dv.setUint32(total - 8, Math.floor(len / 536870912)); dv.setUint32(total - 4, (len << 3) >>> 0);
+  const rotr = (x, n) => (x >>> n) | (x << (32 - n)), w = new Uint32Array(64);
+  for (let o = 0; o < total; o += 64) {
+    for (let i = 0; i < 16; i++) w[i] = dv.getUint32(o + i * 4);
+    for (let i = 16; i < 64; i++) {
+      const s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ (w[i - 15] >>> 3), s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ (w[i - 2] >>> 10);
+      w[i] = (w[i - 16] + s0 + w[i - 7] + s1) >>> 0;
+    }
+    let [a, b, c, d, e, f, g, h] = H;
+    for (let i = 0; i < 64; i++) {
+      const t1 = (h + (rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)) + ((e & f) ^ (~e & g)) + K[i] + w[i]) >>> 0;
+      const t2 = ((rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)) + ((a & b) ^ (a & c) ^ (b & c))) >>> 0;
+      h = g; g = f; f = e; e = (d + t1) >>> 0; d = c; c = b; b = a; a = (t1 + t2) >>> 0;
+    }
+    [a, b, c, d, e, f, g, h].forEach((v, i) => { H[i] = (H[i] + v) >>> 0; });
+  }
+  return H.map((v) => v.toString(16).padStart(8, "0")).join("");
 }
 
 function load(key, fallback) { try { return JSON.parse(store?.getItem(key) ?? "null") ?? fallback; } catch { return fallback; } }
 function save(key, val) { try { store?.setItem(key, JSON.stringify(val)); } catch {} }
 
-function today() { return params.get("datum") ? new Date(params.get("datum")) : new Date(); }
+// ?datum=2026-12-05 als Ortszeit lesen (new Date("2026-12-05") wäre UTC und damit westlich von Europa einen Tag zu früh)
+function today() {
+  const m = /^(\d{4})-(\d{1,2})-(\d{1,2})$/.exec(params.get("datum") || "");
+  const d = m ? new Date(+m[1], +m[2] - 1, +m[3], 12) : null;
+  return d && !isNaN(d) ? d : new Date();
+}
+const dayKey = () => { const d = today(); return d.getFullYear() * 10000 + d.getMonth() * 100 + d.getDate(); };
 
 function isUnlocked(n, cfg) {
   if (params.get("alle")) return true;
@@ -124,9 +164,12 @@ function confettiLoop(now) {
 
 /* ---------- Schnee in drei Tiefen: nahe Flocken sind größer, schneller und heller ---------- */
 const snowCv = $("snow"), sctx = snowCv.getContext("2d");
-let flakes = [], snowT = 0;
+let flakes = [], snowT = 0, snowW = 0;
 function makeSnow() {
   fitCanvas(snowCv);
+  // Am Handy feuert "resize" bei jedem Ein- und Ausblenden der Adressleiste. Dann nur die Fläche anpassen, die Flocken bleiben.
+  if (flakes.length && innerWidth === snowW) return;
+  snowW = innerWidth;
   const count = Math.round(Math.min(70, innerWidth / 16));
   flakes = Array.from({ length: count }, () => {
     const z = Math.random(); // 0 = weit weg, 1 = nah
@@ -154,11 +197,11 @@ if (!reduceMotion) {
 const PC_ONLY_TOOLS = new Set(["source", "file", "cookie", "run", "robots", "urlparam"]); // am PC macht man das mit F12
 let mode = "mobile";
 function detectMode() { return matchMedia("(pointer: coarse)").matches || innerWidth < 820 ? "mobile" : "pc"; }
-function applyMode(name) {
+function applyMode(name, remember = false) {
   mode = name === "pc" ? "pc" : "mobile";
   document.documentElement.dataset.mode = mode;
   document.querySelectorAll(".modes button").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.mode === mode)));
-  save("mode", mode);
+  if (remember) save("mode", mode); // nur die eigene Wahl merken, nicht die automatische Erkennung
 }
 let forceTools = false; // PC-Modus: Werkzeug trotzdem einblenden, wenn F12 nicht klappt
 function toolsFor(d) {
@@ -166,12 +209,14 @@ function toolsFor(d) {
   return mode === "pc" && !forceTools ? list.filter((t) => !PC_ONLY_TOOLS.has(t)) : list;
 }
 const hiddenTools = (d) => mode === "pc" && !forceTools && (d?.tools || []).some((t) => PC_ONLY_TOOLS.has(t));
-document.querySelectorAll(".modes button").forEach((b) => (b.onclick = () => { applyMode(b.dataset.mode); toast(mode === "pc" ? "PC-Modus: Du nutzt die echten Browser-Werkzeuge (F12)." : "Handy-Modus: Alle Werkzeuge sind eingebaut."); }));
+document.querySelectorAll(".modes button").forEach((b) => (b.onclick = () => { applyMode(b.dataset.mode, true); toast(mode === "pc" ? "PC-Modus: Du nutzt die echten Browser-Werkzeuge (F12)." : "Handy-Modus: Alle Werkzeuge sind eingebaut."); }));
 applyMode(params.get("modus") || load("mode", null) || detectMode());
 
 /* ---------- Werkzeugkasten (läuft auf jedem Gerät) ---------- */
 const MORSE = { ".-": "A", "-...": "B", "-.-.": "C", "-..": "D", ".": "E", "..-.": "F", "--.": "G", "....": "H", "..": "I", ".---": "J", "-.-": "K", ".-..": "L", "--": "M", "-.": "N", "---": "O", ".--.": "P", "--.-": "Q", ".-.": "R", "...": "S", "-": "T", "..-": "U", "...-": "V", ".--": "W", "-..-": "X", "-.--": "Y", "--..": "Z", "-----": "0", ".----": "1", "..---": "2", "...--": "3", "....-": "4", ".....": "5", "-....": "6", "--...": "7", "---..": "8", "----.": "9" };
-const hexBytes = (s) => (s.replace(/[^0-9a-f]/gi, "").match(/../g) || []).map((h) => parseInt(h, 16));
+const hexBytes = (s) => (s.replace(/0x/gi, "").replace(/[^0-9a-f]/gi, "").match(/../g) || []).map((h) => parseInt(h, 16));
+// Handys machen aus "--" gern einen langen Strich und aus "..." ein Auslassungszeichen
+const morseClean = (s) => s.replace(/…/g, "...").replace(/—/g, "--").replace(/[–−_]/g, "-").replace(/[·•]/g, ".");
 const T = {
   caesar: { title: "Caesar-Dreher", ic: "lock", hint: "Gib den Text ein und um wie viele Stellen er zurückgeschoben werden soll.",
     fields: [{ k: "text", l: "Text", v: "" }, { k: "n", l: "Zurückschieben um", v: "3", t: "number" }],
@@ -183,7 +228,7 @@ const T = {
   binary: { title: "Binär-Decoder", ic: "binary", hint: "Füge die Nullen und Einsen ein.", fields: [{ k: "text", l: "Binärzahlen", v: "" }],
     run: (v) => (v.text.replace(/[^01]/g, "").match(/.{8}/g) || []).map((b) => String.fromCharCode(parseInt(b, 2))).join("") },
   morse: { title: "Morse-Decoder", ic: "radio", hint: "Füge Punkte und Striche ein, Buchstaben durch Leerzeichen getrennt.", fields: [{ k: "text", l: "Morsecode", v: "" }],
-    run: (v) => v.text.trim().split(/\s+/).filter(Boolean).map((m) => MORSE[m] || "?").join("") },
+    run: (v) => morseClean(v.text).trim().split(/\s+/).filter(Boolean).map((m) => (m === "/" ? " " : MORSE[m] || "?")).join("") },
   xor: { title: "XOR-Rechner", ic: "xor", hint: "Füge die Hex-Zahlen ein und den Schlüssel.", fields: [{ k: "text", l: "Hex-Zahlen", v: "" }, { k: "key", l: "Schlüssel", v: "42", t: "number" }],
     run: (v) => hexBytes(v.text).map((b) => String.fromCharCode(b ^ (+v.key & 255))).join("") },
   vigenere: { title: "Vigenère-Decoder", ic: "key", hint: "Gib den Text und das Schlüsselwort ein.", fields: [{ k: "text", l: "Text", v: "" }, { k: "key", l: "Schlüsselwort", v: "" }],
@@ -192,7 +237,7 @@ const T = {
   source: { title: "Quelltext-Ansicht", ic: "code", hint: "So sieht der Computer diese Karte, wenn du F12 drückst.", fields: [], button: "Quelltext anzeigen", copy: true,
     run: (v, d) => d.task },
   file: { title: "Datei als Text lesen", ic: "scroll", hint: "Zeigt dir den Inhalt der Datei aus der Aufgabe als Text.", fields: [], button: "Datei als Text öffnen", copy: true,
-    run: async () => (await fetch("files/bild-tuer7.svg")).text() },
+    run: async () => { const r = await fetch("files/bild-tuer7.svg"); if (!r.ok) throw new Error(r.status); return r.text(); } },
   run: { title: "Programm ausführen", ic: "terminal", hint: "Führt das Programm aus der Aufgabe für dich aus.", fields: [], button: "Ausführen", copy: true,
     run: (v, d) => { const m = d.task.match(/\[([\d,\s]+)\]/); return m ? m[1].split(",").map((n) => String.fromCharCode(+n + 1)).join("") : "Fehler"; } },
   robots: { title: "robots.txt öffnen", ic: "ban", hint: "Öffnet die Datei robots.txt dieser Seite in einem neuen Tab. Dort steht ein Dateiname, den du dann selbst aufrufst.", fields: [{ k: "f", l: "Dateiname (leer = robots.txt)", v: "" }], button: "Datei öffnen",
@@ -225,7 +270,10 @@ function buildTools(d, box) {
     const out = document.createElement("pre");
     out.className = "tool-out"; out.textContent = "…";
     const values = () => Object.fromEntries(Object.entries(inputs).map(([k, el]) => [k, el.value]));
-    const go = async () => { out.textContent = (await t.run(values(), d)) || "…"; };
+    const go = async () => {
+      try { out.textContent = (await t.run(values(), d)) || "…"; }
+      catch { out.textContent = "Das hat nicht geklappt. Prüfe deine Internetverbindung und versuch es nochmal."; }
+    };
     if (t.button) {
       const b = document.createElement("button");
       b.type = "button"; b.className = "btn small"; b.textContent = t.button; b.onclick = go;
@@ -247,13 +295,22 @@ function buildTools(d, box) {
 
 /* ---------- App ---------- */
 (async () => {
-  const [cfg, doors] = await Promise.all([
-    fetch("config.json").then((r) => r.json()),
-    fetch("doors.json").then((r) => r.json()),
-  ]);
+  const getJson = async (url) => { const r = await fetch(url, { cache: "no-cache" }); if (!r.ok) throw new Error(url + " " + r.status); return r.json(); };
+  let cfg, doors;
+  try { [cfg, doors] = await Promise.all([getJson("config.json"), getJson("doors.json")]); }
+  catch (err) {
+    console.error(err);
+    const p = document.createElement("p");
+    p.className = "load-error";
+    p.textContent = "Die Türchen konnten nicht geladen werden. Prüfe deine Internetverbindung und lade die Seite neu.";
+    $("grid").replaceWith(p);
+    return;
+  }
   const byNr = new Map(doors.map((d) => [d.door, d]));
-  let solved = new Set(load("solved", []));
-  let current = null, hintStep = 0, firstRender = true;
+  // Gespeicherten Fortschritt prüfen: nur echte Türchen-Nummern zählen, kaputte Daten werden ignoriert
+  const saved = load("solved", []);
+  let solved = new Set((Array.isArray(saved) ? saved : []).filter((n) => Number.isInteger(n) && byNr.has(n)));
+  let current = null, hintStep = 0, firstRender = true, checking = false;
 
   $("tiktok").href = cfg.tiktok;
   typeWriter($("intro"), cfg.intro);
@@ -377,18 +434,20 @@ function buildTools(d, box) {
   $("flag-form").onsubmit = async (e) => {
     e.preventDefault();
     const guess = $("flag").value.trim().toUpperCase();
-    if (!guess) return;
+    if (!guess || !current || checking) return; // "checking" verhindert, dass ein Doppeltipp zweimal prüft
     // Kleine Toleranz: auch nur das Lösungswort ohne CTRL{ } ist ok, Leerzeichen und andere Klammern vom Handy werden bereinigt
     const clean = guess.replace(/[＜｛(\[]/g, "{").replace(/[＞｝)\]]/g, "}");
     const found = clean.match(/CTRL\s*\{[^{}]*\}/); // ganze Ausgabe eingefügt? Dann die Flagge herausfischen
-    const inner = (found ? found[0] : clean).replace(/^CTRL\s*\{?/, "").replace(/\}$/, "").trim();
+    const inner = (found ? found[0] : clean).replace(/^CTRL\s*\{?/, "").replace(/[{}]/g, "").trim();
     const candidates = new Set([
       inner.replace(/\s+/g, ""),            // Leerzeichen weg
       inner.replace(/[\s,;\-_]+/g, "_"),    // "96 13", "96,13", "HALLO HACKER" -> mit Unterstrich
       inner.replace(/[\s.,']/g, ""),         // "1.000.000" -> 1000000
     ].map((x) => `CTRL{${x}}`));
     let ok = false;
-    for (const c of candidates) { if ((await sha256(c)) === current.hash) { ok = true; break; } }
+    checking = true;
+    try { for (const c of candidates) { if ((await sha256(c)) === current.hash) { ok = true; break; } } }
+    finally { checking = false; }
     const form = $("flag-form");
     if (!ok) {
       $("result").textContent = "Noch nicht richtig. Schau nochmal genau hin oder hol dir einen Tipp.";
@@ -426,4 +485,10 @@ function buildTools(d, box) {
 
   renderGrid();
   renderStats();
+
+  // Bleibt die Seite über Mitternacht offen, geht das neue Türchen ohne Neuladen auf
+  let shownDay = dayKey();
+  const refreshDay = () => { if (dayKey() !== shownDay) { shownDay = dayKey(); renderGrid(); renderStats(); } };
+  setInterval(refreshDay, 30000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) refreshDay(); });
 })();

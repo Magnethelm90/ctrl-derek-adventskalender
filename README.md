@@ -1,4 +1,4 @@
-﻿# ctrl+Derek Adventskalender
+# ctrl+Derek Adventskalender
 
 24 Türchen, 24 Hacking-Rätsel für Einsteiger ab 11 Jahren. Jeden Tag im Dezember öffnet sich ein neues Türchen. Dazu gibt es täglich ein kurzes Video auf dem TikTok-Kanal **ctrl+Derek**.
 
